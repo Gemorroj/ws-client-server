@@ -13,4 +13,18 @@ class EmitterMessage
         $this->resourceId = $resourceId;
         $this->msg = $msg;
     }
+
+    /**
+     * @param string $json
+     * @return static
+     */
+    static public function createFromJson(string $json)
+    {
+        $jsonObject = \json_decode($json);
+        return new static(
+            $jsonObject->type,
+            $jsonObject->resourceId,
+            $jsonObject->msg
+        );
+    }
 }

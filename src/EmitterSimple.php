@@ -3,7 +3,7 @@ namespace WsClientServer;
 
 use Amp\Websocket\Connection;
 
-class Emitter
+class EmitterSimple
 {
     protected $connection;
 

@@ -3,22 +3,22 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Amp\Websocket;
-use WsClientServer\Emitter;
+use WsClientServer\EmitterSimple;
 use Amp\Websocket\Handshake;
 
-echo '[' . \date(\DATE_ATOM) . ']: Emitter started.' . "\n";
+echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple started.' . "\n";
 \register_shutdown_function(function() {
-    echo '[' . \date(\DATE_ATOM) . ']: Emitter shutdown.' . "\n";
+    echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple shutdown.' . "\n";
 });
 
 Amp\Loop::run(function () {
     $handshake = new Handshake('ws://localhost:8080/pusher');
-    $handshake->addHeader('User-Agent', 'Ws-Emitter/0.1');
+    $handshake->addHeader('User-Agent', 'Ws-EmitterSimple/0.1');
 
     /** @var \Amp\Websocket\Connection $connection */
     $connection = yield Websocket\connect($handshake);
     echo 'Connected to websocket server' . "\n";
 
-    $emitter = new Emitter($connection);
+    $emitter = new EmitterSimple($connection);
     yield from $emitter->run();
 });

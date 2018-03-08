@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/../vendor/autoload.php';
+
+use Amp\Websocket;
+use WsClientServer\EmitterTimer;
+use Amp\Websocket\Handshake;
+
+echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple started.' . "\n";
+\register_shutdown_function(function() {
+    echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple shutdown.' . "\n";
+});
+
+Amp\Loop::run(function () {
+    $handshake = new Handshake('ws://localhost:8080/pusher');
+    $handshake->addHeader('User-Agent', 'Ws-EmitterSimple/0.1');
+
+    /** @var \Amp\Websocket\Connection $connection */
+    $connection = yield Websocket\connect($handshake);
+    echo 'Connected to websocket server' . "\n";
+
+    /** @var \Amp\Mysql\Pool $pool */
+    $pool = Amp\Mysql\pool("host=127.0.0.1 user=root password= db=test");
+
+    $emitter = new EmitterTimer($connection, $pool);
+    yield from $emitter->run(5000);
+});
