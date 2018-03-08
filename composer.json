@@ -26,5 +26,9 @@
         "psr-4": {
             "WsClientServer\\Tests\\": "tests/"
         }
-    }
+    },
+    "bin": [
+        "bin/ws-server",
+        "bin/ws-emitter"
+    ]
 }

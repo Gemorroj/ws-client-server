@@ -1,0 +1,41 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <script>
+        // Then some JavaScript in the browser:
+        const socket = new WebSocket('ws://localhost:8080/pusher');
+
+        socket.onopen = function() {
+            console.log("connection established");
+            socket.send(JSON.stringify({
+                "userId": Math.floor(Math.random() * 101)
+            }));
+        };
+
+        socket.onclose = function(event) {
+            if (event.wasClean) {
+                console.log('connection closed');
+            } else {
+                console.log('break connection');
+            }
+            console.log('code: ' + event.code + ' reason: ' + event.reason);
+        };
+
+        socket.onmessage = function(event) {
+            console.log("data: " + event.data);
+        };
+
+        socket.onerror = function(error) {
+            console.log("error: " + error.message);
+        };
+    </script>
+</head>
+<body>
+<div>
+    <h3>test ws-client-server</h3>
+    <p>
+        see console
+    </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/../vendor/autoload.php';
+
+// Run the server application through the WebSocket protocol on port 8080
+$app = new \Ratchet\App('localhost', 8080);
+$app->route('/pusher', new \WsClientServer\Pusher(), ['*']);
+
+echo '[' . \date(\DATE_ATOM) . ']: Websocket server started.' . "\n";
+\register_shutdown_function(function() {
+    echo '[' . \date(\DATE_ATOM) . ']: Websocket server shutdown.' . "\n";
+});
+
+$app->run();
