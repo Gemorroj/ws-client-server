@@ -24,7 +24,10 @@ class Pusher implements MessageComponentInterface
      */
     protected function isEmitter(ConnectionInterface $conn)
     {
-        return $conn->remoteAddress === '127.0.0.1' && $conn->httpRequest->getHeader('User-Agent') === 'Ws-Emitter/0.1';
+        /** @var \GuzzleHttp\Psr7\Request $httpRequest */
+        $httpRequest = $conn->httpRequest;
+
+        return $conn->remoteAddress === '127.0.0.1' && $httpRequest->getHeaderLine('User-Agent') === 'Ws-Emitter/0.1';
     }
 
     /**
@@ -32,12 +35,12 @@ class Pusher implements MessageComponentInterface
      */
     public function onOpen(ConnectionInterface $conn)
     {
-        echo 'New connection ' . $conn->resourceId . "\n";
-
         // if connect emitter
         if ($this->isEmitter($conn)) {
+            echo 'New emitter connection ' . $conn->resourceId . "\n";
             $this->emitter = $conn;
         } else {
+            echo 'New client connection ' . $conn->resourceId . "\n";
             // if connect all other clients
             $this->clients->attach($conn);
         }
@@ -49,21 +52,24 @@ class Pusher implements MessageComponentInterface
      */
     public function onMessage(ConnectionInterface $conn, $msg)
     {
-        echo 'New message from ' . $conn->resourceId . ': ' . $msg . "\n";
-
         // if message from emitter
         if ($this->isEmitter($conn)) {
+            echo 'New message from emitter ' . $conn->resourceId . ': ' . $msg . "\n";
+
             /** @var EmitterMessage $emitterMessage */
             $emitterMessage = \json_decode($msg); // emitter sends EmitterMessage object
             foreach ($this->clients as $client) {
                 if ($client->resourceId === $emitterMessage->resourceId) { // send emitter message to client. identifying the client by resourceId
+                    echo 'Send message to client ' . $client->resourceId . ': ' . $msg . "\n";
                     $client->send($msg);
                     break;
                 }
             }
         } else {
+            echo 'New message from client ' . $conn->resourceId . ': ' . $msg . "\n";
+            echo 'Send message to emitter ' . $this->emitter->resourceId . ': ' . $msg . "\n";
             // if message from client, forward the message to emitter
-            $this->emitter->send(\json_encode(new EmitterMessage('message', $conn->resourceId), $msg));
+            $this->emitter->send(\json_encode(new EmitterMessage('message', $conn->resourceId, $msg)));
         }
     }
 
@@ -72,13 +78,17 @@ class Pusher implements MessageComponentInterface
      */
     public function onClose(ConnectionInterface $conn)
     {
-        echo 'Close connection ' . $conn->resourceId . "\n";
-
         // if emitter close connection, drop all clients... this should not happen
         if ($this->isEmitter($conn)) {
+            echo 'Close connection emitter ' . $conn->resourceId . "\n";
             $this->clients->removeAll($this->clients);
         } else {
-            $this->emitter->send(\json_encode(new EmitterMessage('close', $conn->resourceId)));
+            echo 'Close connection client ' . $conn->resourceId . "\n";
+
+            $msg = \json_encode(new EmitterMessage('close', $conn->resourceId));
+
+            echo 'Send message to emitter ' . $this->emitter->resourceId . ':' . $msg . "\n";
+            $this->emitter->send($msg);
         }
 
         $this->clients->detach($conn);
