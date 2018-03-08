@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Archive7z\\": "src/"
+            "WsClientServer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Archive7z\\Tests\\": "tests/"
+            "WsClientServer\\Tests\\": "tests/"
         }
     }
 }
