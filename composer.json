@@ -1,7 +1,7 @@
 {
     "name": "gemorroj/ws-client-server",
     "description": "Weboscket client-server testing",
-    "keywords": ["ws","websocket","ratchet","react","reactphp","event-loop","amphp","acync","asynchronous"],
+    "keywords": ["ws","websocket","ratchet","react","reactphp","event-loop","amphp","acync","asynchronous","async-mysql"],
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -15,17 +15,9 @@
         "amphp/websocket": "dev-master",
         "amphp/mysql": "dev-master"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^7"
-    },
     "autoload": {
         "psr-4": {
             "WsClientServer\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "WsClientServer\\Tests\\": "tests/"
         }
     },
     "bin": [
