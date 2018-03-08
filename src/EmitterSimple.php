@@ -12,6 +12,9 @@ class EmitterSimple
         $this->connection = $connection;
     }
 
+    /**
+     * @return \Generator
+     */
     public function run()
     {
         while ($message = yield $this->connection->receive()) {
