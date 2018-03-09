@@ -10,8 +10,6 @@ class Pusher implements MessageComponentInterface
 {
     /** @var ConnectionInterface[]|WsConnection[] */
     protected $clients = [];
-    /** @var \Amp\Mysql\Pool */
-    protected $pool;
     /** @var \Amp\Mysql\Statement $stmtUserData */
     private $stmtUserData;
     /** @var int */
@@ -20,7 +18,10 @@ class Pusher implements MessageComponentInterface
     public function __construct(int $interval = 5000)
     {
         $this->interval = $interval;
-        $this->pool = \Amp\Mysql\pool("host=127.0.0.1 user=root password= db=test");
+        $pool = \Amp\Mysql\pool("host=127.0.0.1 user=root password= db=test");
+        \Amp\asyncCall(function () use ($pool) {
+            $this->stmtUserData = yield $pool->prepare("SELECT * FROM user WHERE id = ?");
+        });
     }
 
     /**
@@ -30,10 +31,6 @@ class Pusher implements MessageComponentInterface
     {
         echo 'New client connection ' . $conn->resourceId . "\n";
         $this->clients[$conn->resourceId]['connection'] = $conn;
-
-        \Amp\asyncCall(function () {
-            $this->stmtUserData = yield $this->pool->prepare("SELECT * FROM user WHERE id = ?");
-        });
     }
 
 
