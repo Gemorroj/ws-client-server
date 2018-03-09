@@ -1,5 +1,7 @@
 # Weboscket client-server testing
 
+see https://github.com/ratchetphp/Ratchet/issues/626
+
 import mysql dump `example-db.sql`
 
 Start Websocket server

@@ -6,9 +6,9 @@ use Amp\Websocket;
 use WsClientServer\EmitterTimer;
 use Amp\Websocket\Handshake;
 
-echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple started.' . "\n";
+echo '[' . \date(\DATE_ATOM) . ']: EmitterTimer started.' . "\n";
 \register_shutdown_function(function() {
-    echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple shutdown.' . "\n";
+    echo '[' . \date(\DATE_ATOM) . ']: EmitterTimer shutdown.' . "\n";
 });
 
 Amp\Loop::run(function () {
