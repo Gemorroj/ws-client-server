@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/../vendor/autoload.php';
+
+// Run the server application through the WebSocket protocol on port 8080
+$app = new \Ratchet\App('localhost', 8080, '127.0.0.1', \Amp\ReactAdapter\ReactAdapter::get());
+$app->route('/pusher', new \WsClientServer\Joint\Pusher(5000), ['*']);
+
+echo '[' . \date(\DATE_ATOM) . ']: Joint Websocket server and Emitter started.' . "\n";
+\register_shutdown_function(function () {
+    echo '[' . \date(\DATE_ATOM) . ']: Joint Websocket server and Emitter shutdown.' . "\n";
+});
+
+$app->run();
