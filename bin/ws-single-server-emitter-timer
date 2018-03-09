@@ -6,12 +6,12 @@ use Amp\Websocket;
 use WsClientServer\EmitterTimer;
 use Amp\Websocket\Handshake;
 
-echo '[' . \date(\DATE_ATOM) . ']: EmitterTimer started.' . "\n";
-\register_shutdown_function(function () {
-    echo '[' . \date(\DATE_ATOM) . ']: EmitterTimer shutdown.' . "\n";
-});
+// Run the server application through the WebSocket protocol on port 8080
+$app = new \Ratchet\App('localhost', 8080, '127.0.0.1', \Amp\ReactAdapter\ReactAdapter::get());
+$app->route('/pusher', new \WsClientServer\Pusher(), ['*']);
 
-Amp\Loop::run(function () {
+
+\Amp\asyncCall(function () {
     $handshake = new Handshake('ws://localhost:8080/pusher');
     $handshake->addHeader('User-Agent', 'Ws-EmitterSimple/0.1');
 
@@ -25,3 +25,11 @@ Amp\Loop::run(function () {
     $emitter = new EmitterTimer($connection, $pool);
     yield from $emitter->run(5000);
 });
+
+
+echo '[' . \date(\DATE_ATOM) . ']: Single Websocket server and Emitter started.' . "\n";
+\register_shutdown_function(function () {
+    echo '[' . \date(\DATE_ATOM) . ']: Single Websocket server and Emitter shutdown.' . "\n";
+});
+
+$app->run();

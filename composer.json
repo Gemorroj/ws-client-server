@@ -13,7 +13,8 @@
         "php": ">=7.1",
         "cboden/ratchet": "dev-master",
         "amphp/websocket": "dev-master",
-        "amphp/mysql": "dev-master"
+        "amphp/mysql": "dev-master",
+        "amphp/react-adapter": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -23,6 +24,7 @@
     "bin": [
         "bin/ws-server",
         "bin/ws-emitter-simple",
-        "bin/ws-emitter-timer"
+        "bin/ws-emitter-timer",
+        "bin/ws-single-server-emitter-timer"
     ]
 }

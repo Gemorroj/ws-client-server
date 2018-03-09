@@ -7,7 +7,7 @@ $app = new \Ratchet\App('localhost', 8080);
 $app->route('/pusher', new \WsClientServer\Pusher(), ['*']);
 
 echo '[' . \date(\DATE_ATOM) . ']: Websocket server started.' . "\n";
-\register_shutdown_function(function() {
+\register_shutdown_function(function () {
     echo '[' . \date(\DATE_ATOM) . ']: Websocket server shutdown.' . "\n";
 });
 

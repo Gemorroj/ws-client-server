@@ -7,7 +7,7 @@ use WsClientServer\EmitterSimple;
 use Amp\Websocket\Handshake;
 
 echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple started.' . "\n";
-\register_shutdown_function(function() {
+\register_shutdown_function(function () {
     echo '[' . \date(\DATE_ATOM) . ']: EmitterSimple shutdown.' . "\n";
 });
 

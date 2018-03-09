@@ -18,7 +18,7 @@ class EmitterMessage
      * @param string $json
      * @return static
      */
-    static public function createFromJson(string $json)
+    public static function createFromJson(string $json)
     {
         $jsonObject = \json_decode($json);
         return new static(
