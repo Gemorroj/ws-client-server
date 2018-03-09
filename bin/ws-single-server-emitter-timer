@@ -10,10 +10,9 @@ use Amp\Websocket\Handshake;
 $app = new \Ratchet\App('localhost', 8080, '127.0.0.1', \Amp\ReactAdapter\ReactAdapter::get());
 $app->route('/pusher', new \WsClientServer\Pusher(), ['*']);
 
-
 \Amp\asyncCall(function () {
     $handshake = new Handshake('ws://localhost:8080/pusher');
-    $handshake->addHeader('User-Agent', 'Ws-EmitterSimple/0.1');
+    $handshake->addHeader('User-Agent', 'Ws-Emitter/0.1');
 
     /** @var \Amp\Websocket\Connection $connection */
     $connection = yield Websocket\connect($handshake);

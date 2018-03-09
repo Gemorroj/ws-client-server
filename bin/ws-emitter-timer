@@ -13,7 +13,7 @@ echo '[' . \date(\DATE_ATOM) . ']: EmitterTimer started.' . "\n";
 
 Amp\Loop::run(function () {
     $handshake = new Handshake('ws://localhost:8080/pusher');
-    $handshake->addHeader('User-Agent', 'Ws-EmitterSimple/0.1');
+    $handshake->addHeader('User-Agent', 'Ws-Emitter/0.1');
 
     /** @var \Amp\Websocket\Connection $connection */
     $connection = yield Websocket\connect($handshake);

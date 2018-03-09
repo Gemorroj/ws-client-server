@@ -27,7 +27,7 @@ class Pusher implements MessageComponentInterface
         /** @var \GuzzleHttp\Psr7\Request $httpRequest */
         $httpRequest = $conn->httpRequest;
 
-        return $conn->remoteAddress === '127.0.0.1' && $httpRequest->getHeaderLine('User-Agent') === 'Ws-EmitterSimple/0.1';
+        return $conn->remoteAddress === '127.0.0.1' && $httpRequest->getHeaderLine('User-Agent') === 'Ws-Emitter/0.1';
     }
 
     /**
