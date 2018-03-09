@@ -8,7 +8,7 @@ use WsClientServer\EmitterMessage;
 
 class Pusher implements MessageComponentInterface
 {
-    /** @var ConnectionInterface[]|WsConnection[] */
+    /** @var array */
     protected $clients = [];
     /** @var \Amp\Mysql\Statement $stmtUserData */
     private $stmtUserData;
@@ -45,6 +45,8 @@ class Pusher implements MessageComponentInterface
         $userMsg = \json_decode($msg);
 
         if ($userMsg->type === 'connect') {
+            echo 'Start timer for client ' . $conn->resourceId . "\n";
+
             $this->clients[$conn->resourceId]['timer'] = \Amp\Loop::repeat($this->interval, function () use ($userMsg, $conn) {
                 /** @var \Amp\Mysql\ResultSet $result */
                 $result = yield $this->stmtUserData->execute([$userMsg->userId]);
@@ -57,7 +59,7 @@ class Pusher implements MessageComponentInterface
                         $conn->resourceId,
                         \json_encode($row)
                     ));
-                    echo 'Send message to client : ' . $msg . "\n";
+                    echo 'Send message to client ' . $conn->resourceId . ': ' . $msg . "\n";
                     $conn->send($msg);
                 }
             });
@@ -69,7 +71,7 @@ class Pusher implements MessageComponentInterface
      */
     public function onClose(ConnectionInterface $conn)
     {
-        echo 'Close connection client ' . $conn->resourceId . "\n";
+        echo 'Close connection and timer for client ' . $conn->resourceId . "\n";
 
         \Amp\Loop::cancel($this->clients[$conn->resourceId]['timer']);
         unset($this->clients[$conn->resourceId]);
@@ -81,7 +83,7 @@ class Pusher implements MessageComponentInterface
      */
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
-        echo 'Error connection ' . $conn->resourceId . "\n";
+        echo 'Error connection ' . $conn->resourceId . ': ' . $e->getMessage() . "\n";
 
         $conn->close();
     }
