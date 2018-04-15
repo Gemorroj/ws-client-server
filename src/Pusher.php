@@ -14,7 +14,7 @@ class Pusher implements MessageComponentInterface
 
     public function __construct()
     {
-        $this->clients = new \SplObjectStorage;
+        $this->clients = new \SplObjectStorage();
     }
 
     /**
@@ -22,7 +22,7 @@ class Pusher implements MessageComponentInterface
      * @param ConnectionInterface|WsConnection $conn
      * @return bool
      */
-    protected function isEmitter(ConnectionInterface $conn)
+    protected function isEmitter(ConnectionInterface $conn) : bool
     {
         /** @var \GuzzleHttp\Psr7\Request $httpRequest */
         $httpRequest = $conn->httpRequest;

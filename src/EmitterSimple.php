@@ -15,7 +15,7 @@ class EmitterSimple
     /**
      * @return \Generator
      */
-    public function run()
+    public function run() : \Generator
     {
         while ($message = yield $this->connection->receive()) {
             $payload = yield $message->buffer();

@@ -21,13 +21,14 @@ class EmitterTimer
 
     /**
      * @param int $interval
+     * @return \Generator
      * @throws \Amp\Mysql\ConnectionException
      * @throws \Amp\Mysql\FailureException
      */
-    public function run(int $interval)
+    public function run(int $interval) : \Generator
     {
         /** @var \Amp\Mysql\Statement $stmtUserData */
-        $this->stmtUserData = yield $this->pool->prepare("SELECT * FROM user WHERE id = ?");
+        $this->stmtUserData = yield $this->pool->prepare('SELECT * FROM user WHERE id = ?');
 
         while ($message = yield $this->connection->receive()) {
             /** @var string $payload */
@@ -50,7 +51,6 @@ class EmitterTimer
                 }
                 continue;
             }
-
         }
     }
 
@@ -60,7 +60,7 @@ class EmitterTimer
      * @return \Generator
      * @throws \Throwable
      */
-    protected function messageHandler(EmitterMessage $emitterMessage)
+    protected function messageHandler(EmitterMessage $emitterMessage) : \Generator
     {
         $userMsg = \json_decode($emitterMessage->msg);
 

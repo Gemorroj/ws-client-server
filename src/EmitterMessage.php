@@ -7,7 +7,7 @@ class EmitterMessage
     public $msg;
     public $type;
 
-    public function __construct(string $type, int $resourceId, string $msg = null)
+    public function __construct(string $type, int $resourceId, ?string $msg = null)
     {
         $this->type = $type;
         $this->resourceId = $resourceId;
@@ -18,7 +18,7 @@ class EmitterMessage
      * @param string $json
      * @return static
      */
-    public static function createFromJson(string $json)
+    public static function createFromJson(string $json) : self
     {
         $jsonObject = \json_decode($json);
         return new static(
